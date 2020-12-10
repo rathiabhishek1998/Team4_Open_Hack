@@ -31,5 +31,11 @@ jobs:
 
     - name: Build with Maven
       run: mvn -B package --file apis/user-java/pom.xml
+      
+    - name: Creating Issue
+      if: failed()
+      uses: JasonEtco/create-an-issue@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
   
