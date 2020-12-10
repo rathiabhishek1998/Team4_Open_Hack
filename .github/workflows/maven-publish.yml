@@ -33,7 +33,7 @@ jobs:
       run: mvn -B package --file apis/user-java/pom.xml
       
     - name: Creating Issue
-      if: failed()
+      if: failure()
       uses: JasonEtco/create-an-issue@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
