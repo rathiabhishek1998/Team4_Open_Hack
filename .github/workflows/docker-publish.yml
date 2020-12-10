@@ -33,7 +33,8 @@ jobs:
             docker-compose --file docker-compose.test.yml build
             docker-compose --file docker-compose.test.yml run sut
           else
-            docker build . --file apis/user-java/Dockerfile
+            cd apis/user-java/
+            docker build . --file Dockerfile
           fi
 
   # Push image to GitHub Packages.
