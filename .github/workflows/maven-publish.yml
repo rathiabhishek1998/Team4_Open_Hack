@@ -7,11 +7,14 @@ on:
   # Trigger the workflow on push or pull request,
   # but only for the main branch
   push:
-    branches:
+   branches:
       - BREAKIN_THE_BUILD
+   paths:
+      - apis/user-java/**
   pull_request:
     branches:
       - BREAKIN_THE_BUILD
+    
 jobs:
   build:
 
