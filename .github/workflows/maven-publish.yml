@@ -33,8 +33,10 @@ jobs:
       run: mvn -B package --file apis/user-java/pom.xml
     
     - name: Test of Maven
-      run:  cd apis/user-java  
-            mvn test 
+      run: |
+            cd apis/user-java             
+            mvn test  
+
       
     - name: Creating Issue
       if: failure()
