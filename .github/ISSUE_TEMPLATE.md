@@ -1,3 +1,10 @@
+---
+title: Someone just pushed
+assignees: JasonEtco, matchai
+labels: bug, enhancement
+---
+Someone just pushed, oh no! Here's who did it: {{ payload.sender.login }}.
+
 <!--
 IF SUFFICIENT INFORMATION IS NOT PROVIDED VIA THE FOLLOWING TEMPLATE THE ISSUE MIGHT BE CLOSED WITHOUT FURTHER CONSIDERATION OR INVESTIGATION
 -->
