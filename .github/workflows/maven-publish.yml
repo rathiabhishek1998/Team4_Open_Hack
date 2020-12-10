@@ -4,9 +4,14 @@
 name: Maven Package
 
 on:
-  release:
-    types: [created]
-
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - BREAKIN_THE_BUILD
+  pull_request:
+    branches:
+      - BREAKIN_THE_BUILD
 jobs:
   build:
 
