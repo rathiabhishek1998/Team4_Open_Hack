@@ -71,6 +71,14 @@ jobs:
       - uses: azure/login@v1
         with:
          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      - name: Azure CLI script Staging Start
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+             az webapp start --name openhackrwd9juo9userjava --resource-group openhackrwd9juo9rg --slot staging
+      
       #Web App Service     
       - uses: azure/webapps-deploy@v2
         with:  
@@ -116,3 +124,10 @@ jobs:
           azcliversion: 2.0.72
           inlineScript: |
              az webapp deployment slot swap  -g openhackrwd9juo9rg -n openhackrwd9juo9userjava --slot production --target-slot staging
+     
+      - name: Azure CLI script Staging Stop
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+             az webapp stop --name openhackrwd9juo9userjava --resource-group openhackrwd9juo9rg --slot staging
