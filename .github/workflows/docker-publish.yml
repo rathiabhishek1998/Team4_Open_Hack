@@ -88,4 +88,11 @@ jobs:
           # Fail this action after this many failed attempts
           max-attempts: 3 # Optional, defaults to 1
           # Delay between retries
-          retry-delay: 5s # Optional, only applicable to max-attempts > 1     
+          retry-delay: 5s # Optional, only applicable to max-attempts > 1   
+        
+      - name: Azure CLI script
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+             az webapp deployment slot swap  -g openhackrwd9juo9rg -n openhackrwd9juo9userjava --slot staging --target-slot production
