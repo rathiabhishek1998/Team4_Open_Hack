@@ -82,7 +82,7 @@ jobs:
         uses: jtalk/url-health-check-action@v1.2
         with:
           # Check the following URLs one by one sequentially
-          url: https://openhackrwd9juo9userjava-staging.azurewebsites.net/api/healthcheck/user-java
+          url: https://openhackrwd9juo9userjava-staging.azurewebsites.net/api/healthcheck/user-java1
           # Follow redirects, or just report success on 3xx status codes
           follow-redirect: no # Optional, defaults to "no"
           # Fail this action after this many failed attempts
@@ -96,3 +96,5 @@ jobs:
           azcliversion: 2.0.72
           inlineScript: |
              az webapp deployment slot swap  -g openhackrwd9juo9rg -n openhackrwd9juo9userjava --slot staging --target-slot production
+             
+      
