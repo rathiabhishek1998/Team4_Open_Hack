@@ -75,4 +75,4 @@ jobs:
       - uses: azure/webapps-deploy@v2
         with:  
           app-name: 'openhackrwd9juo9userjava'
-          images: $IMAGE_ID:${{github.run_number}}
+          images: openhackrwd9juo9acr.azurecr.io/devopsoh/api-user-java:${{github.run_number}}
