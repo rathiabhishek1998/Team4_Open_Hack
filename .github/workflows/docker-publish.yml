@@ -77,4 +77,14 @@ jobs:
           app-name: 'openhackrwd9juo9userjava'
           images: openhackrwd9juo9acr.azurecr.io/devopsoh/api-user-java:${{github.run_number}}
           slot-name: 'staging'
-           
+      - name: Check the deployed service URL for staging
+      - uses: jtalk/url-health-check-action@v1.2
+        with:
+          # Check the following URLs one by one sequentially
+          url: https://openhackrwd9juo9userjava-staging.azurewebsites.net/api/healthcheck/user-java
+          # Follow redirects, or just report success on 3xx status codes
+          follow-redirect: no # Optional, defaults to "no"
+          # Fail this action after this many failed attempts
+          max-attempts: 3 # Optional, defaults to 1
+          # Delay between retries
+          retry-delay: 5s # Optional, only applicable to max-attempts > 1     
