@@ -66,10 +66,12 @@ jobs:
 
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
-
-      
-      - uses: azure/webapps-deploy@v2
+      #Azure login
+      - uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}  
+         creds: ${{ secrets.AZURE_CREDENTIALS }}
+      #Web App Service     
+      - uses: azure/webapps-deploy@v2
+        with:  
           app-name: 'JavaApp'
           images: $IMAGE_ID
