@@ -47,15 +47,18 @@ jobs:
              docker build . --file Dockerfile --tag $IMAGE_NAME
 
       - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+        uses: docker/login-action@v1
+        with:
+          username: ${{secrets.USERNAME }}
+          password: ${{secrets.PASSWORD }}
+
+
 
       - name: Push image
         run: |
-          IMAGE_ID=docker.pkg.github.com/${{ github.repository_owner }}/${{ github.repository }}/$IMAGE_NAME
+          IMAGE_ID=openhackrwd9juo9acr.azurecr.io/devopsoh/api-user-java
 
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-
+        
           # Strip git ref prefix from version
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
 
