@@ -1,0 +1,133 @@
+name: Docker
+
+on:
+  push:
+    # Publish `BREAKIN_THE_BUILD` as Docker `latest` image.
+    branches:
+      - master
+      - BREAKIN_THE_BUILD
+    paths:
+      - apis/user-java/**
+      - .github/workflows/docker-publish.yml
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+  # Run tests for any PRs.
+
+
+env:
+  # TODO: Change variable to your image's name.
+  IMAGE_NAME: image
+  IMAGE_ID: openhackrwd9juo9acr.azurecr.io/devopsoh/api-user-java  
+
+jobs:
+  # Run tests.
+  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+ 
+
+      - name: Build image
+        run: |
+             cd apis/user-java/
+             docker build . --file Dockerfile --tag $IMAGE_NAME
+
+      - name: Log into registry
+        uses: azure/docker-login@v1
+        with:  
+          login-server: openhackrwd9juo9acr.azurecr.io 
+          username: ${{secrets.USERNAME }}
+          password: ${{secrets.PASSWORD }}
+
+
+
+      - name: Push image
+        run: |
+          IMAGE_ID=openhackrwd9juo9acr.azurecr.io/devopsoh/api-user-java
+
+        
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "BREAKIN_THE_BUILD" ] && VERSION=${{github.run_number}}
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+      #Azure login
+      - uses: azure/login@v1
+        with:
+         creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      - name: Azure CLI script Staging Start
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+             az webapp start --name openhackrwd9juo9userjava --resource-group openhackrwd9juo9rg --slot staging
+      
+      #Web App Service     
+      - uses: azure/webapps-deploy@v2
+        with:  
+          app-name: 'openhackrwd9juo9userjava'
+          images: openhackrwd9juo9acr.azurecr.io/devopsoh/api-user-java:${{github.run_number}}
+          slot-name: 'staging'
+          
+      - name: Check the deployed service URL for staging
+        uses: jtalk/url-health-check-action@v1.2
+        with:
+          # Check the following URLs one by one sequentially
+          url: https://openhackrwd9juo9userjava-staging.azurewebsites.net/api/healthcheck/user-java
+          # Follow redirects, or just report success on 3xx status codes
+          follow-redirect: no # Optional, defaults to "no"
+          # Fail this action after this many failed attempts
+          max-attempts: 3 # Optional, defaults to 1
+          # Delay between retries
+          retry-delay: 5s # Optional, only applicable to max-attempts > 1   
+        
+      - name: Azure CLI script
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+             az webapp deployment slot swap  -g openhackrwd9juo9rg -n openhackrwd9juo9userjava --slot staging --target-slot production
+             
+      - name: Check the deployed service URL for production
+        uses: jtalk/url-health-check-action@v1.2
+        with:
+          # Check the following URLs one by one sequentially
+          url: https://openhackrwd9juo9userjava.azurewebsites.net/api/healthcheck/user-java
+          # Follow redirects, or just report success on 3xx status codes
+          follow-redirect: no # Optional, defaults to "no"
+          # Fail this action after this many failed attempts
+          max-attempts: 3 # Optional, defaults to 1
+          # Delay between retries
+          retry-delay: 5s # Optional, only applicable to max-attempts > 1
+      
+      - name: Azure CLI script Rollback
+        if: failure()
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+             az webapp deployment slot swap  -g openhackrwd9juo9rg -n openhackrwd9juo9userjava --slot production --target-slot staging
+     
+      - name: Azure CLI script Staging Stop
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+             az webapp stop --name openhackrwd9juo9userjava --resource-group openhackrwd9juo9rg --slot staging
