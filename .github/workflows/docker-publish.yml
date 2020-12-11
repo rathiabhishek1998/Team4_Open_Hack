@@ -39,8 +39,8 @@ jobs:
              docker build . --file Dockerfile --tag $IMAGE_NAME
 
       - name: Log into registry
-        uses: docker/login-action@v1
-        with:
+        uses: docker/openhackrwd9juo9acr.azurecr.io
+        with:  
           username: ${{secrets.USERNAME }}
           password: ${{secrets.PASSWORD }}
 
