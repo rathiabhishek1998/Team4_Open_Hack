@@ -77,8 +77,9 @@ jobs:
           app-name: 'openhackrwd9juo9userjava'
           images: openhackrwd9juo9acr.azurecr.io/devopsoh/api-user-java:${{github.run_number}}
           slot-name: 'staging'
+          
       - name: Check the deployed service URL for staging
-      - uses: jtalk/url-health-check-action@v1.2
+        uses: jtalk/url-health-check-action@v1.2
         with:
           # Check the following URLs one by one sequentially
           url: https://openhackrwd9juo9userjava-staging.azurewebsites.net/api/healthcheck/user-java
