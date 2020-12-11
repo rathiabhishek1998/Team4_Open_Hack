@@ -70,5 +70,6 @@ jobs:
       
       - uses: azure/webapps-deploy@v2
         with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}  
           app-name: 'JavaApp'
           images: $IMAGE_ID
