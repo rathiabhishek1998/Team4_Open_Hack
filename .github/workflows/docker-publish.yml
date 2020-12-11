@@ -39,8 +39,9 @@ jobs:
              docker build . --file Dockerfile --tag $IMAGE_NAME
 
       - name: Log into registry
-        uses: docker/openhackrwd9juo9acr.azurecr.io
+        uses: azure/docker-login@v1
         with:  
+          login-server: openhackrwd9juo9acr.azurecr.io 
           username: ${{secrets.USERNAME }}
           password: ${{secrets.PASSWORD }}
 
