@@ -8,7 +8,7 @@ on:
       - BREAKIN_THE_BUILD
     paths:
       - apis/user-java/**
-      - .github/workflows/prod-build-java.yml
+      - .github/workflows/docker-publish.yml
     # Publish `v1.2.3` tags as releases.
     tags:
       - v*
