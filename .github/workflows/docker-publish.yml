@@ -66,3 +66,9 @@ jobs:
 
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
+
+      
+      - uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'JavaApp'
+          images: $IMAGE_ID
