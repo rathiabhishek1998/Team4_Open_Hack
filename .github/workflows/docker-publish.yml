@@ -5,8 +5,10 @@ on:
     # Publish `BREAKIN_THE_BUILD` as Docker `latest` image.
     branches:
       - master
+      - BREAKIN_THE_BUILD
     paths:
       - apis/user-java/**
+      - .github/workflows/prod-build-java.yml
     # Publish `v1.2.3` tags as releases.
     tags:
       - v*
@@ -26,16 +28,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Run tests
-        run: |
-          if [ -f docker-compose.test.yml ]; then
-            docker-compose --file docker-compose.test.yml build
-            docker-compose --file docker-compose.test.yml run sut
-          else
-            cd apis/user-java/
-            docker build . --file Dockerfile
-          fi
 
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
