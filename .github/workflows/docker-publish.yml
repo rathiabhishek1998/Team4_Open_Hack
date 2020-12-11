@@ -19,6 +19,7 @@ on:
 env:
   # TODO: Change variable to your image's name.
   IMAGE_NAME: image
+  IMAGE_ID: openhackrwd9juo9acr.azurecr.io/devopsoh/api-user-java  
 
 jobs:
   # Run tests.
@@ -74,4 +75,4 @@ jobs:
       - uses: azure/webapps-deploy@v2
         with:  
           app-name: 'openhackrwd9juo9userjava'
-          images: $IMAGE_ID
+          images: $IMAGE_ID:${{github.run_number}}
